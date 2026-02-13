@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tanishq Shrivastava | Architect</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        paper: '#F9F8F6',
+                        ink: '#0a0a0a',
+                        taupe: '#EBE5DE',
+                        gold: '#D4AF37',
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    animation: {
+                        'reveal-up': 'revealUp 1s cubic-bezier(0.2, 1, 0.3, 1) forwards',
+                        'grow-bar': 'growBar 1.5s ease-out forwards',
+                        'blink': 'blink 1s step-end infinite',
+                    },
+                    keyframes: {
+                        revealUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        growBar: {
+                            '0%': { height: '0%' },
+                            '100%': { height: 'var(--h)' },
+                        },
+                        blink: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F9F8F6;
+            color: #0a0a0a;
+            /* Subtle Noise Texture */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+        }
+
+        /* Editorial Grid Lines */
+        .grid-line {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background-color: rgba(10, 10, 10, 0.05);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Hover Card Effect */
+        .hover-card {
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        .hover-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.05);
+        }
+
+        ::selection {
+            background: #D4AF37;
+            color: #fff;
+        }
+    </style>
+</head>
+<body class="antialiased overflow-x-hidden selection:bg-gold selection:text-white">
+
+    <div class="grid-line left-[10%]"></div>
+    <div class="grid-line left-[50%] hidden md:block"></div>
+    <div class="grid-line right-[10%]"></div>
+
+    <nav class="fixed top-0 w-full p-8 z-50 flex justify-between items-start mix-blend-darken bg-paper/80 backdrop-blur-sm">
+        <span class="font-sans text-[10px] tracking-[0.3em] font-bold uppercase text-ink/80">T. Shrivastava // 2026</span>
+        <div class="flex gap-8">
+            <a href="https://github.com/ghost-exodus" target="_blank" class="font-sans text-[10px] tracking-[0.2em] uppercase hover:text-gold transition-colors">GitHub</a>
+            <a href="https://www.linkedin.com/in/tanishq-shrivastava-a35a6030a/" target="_blank" class="font-sans text-[10px] tracking-[0.2em] uppercase hover:text-gold transition-colors">LinkedIn</a>
+        </div>
+    </nav>
+
+    <section class="min-h-[90vh] flex flex-col justify-end pb-24 px-8 md:px-24 pt-32 max-w-[1400px] mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+            <div class="md:col-span-8">
+                <p class="font-sans text-[10px] tracking-[0.3em] text-ink/40 mb-6 uppercase animate-reveal-up">Backend Architect & Idea Curator</p>
+                
+                <h1 class="font-serif text-5xl md:text-7xl leading-[0.9] tracking-tight text-ink mb-12 animate-reveal-up" style="animation-delay: 0.1s">
+                    <span class="block">TANISHQ</span>
+                    <span class="block italic text-ink/70">SHRIVASTAVA</span>
+                </h1>
+            </div>
+
+            <div class="md:col-span-4 border-t border-ink/10 pt-8 mt-4 animate-reveal-up" style="animation-delay: 0.3s">
+                <p class="font-sans text-sm md:text-base leading-relaxed text-ink/70">
+                    Architecting invisible fortresses. Focused on secured backend systems, digital forensics, and idea curation.
+                </p>
+                <div class="mt-8 font-mono text-xs text-gold">
+                    > JAVA_SPRING_BOOT<br>
+                    > PYTHON_SELENIUM<br>
+                    > C++_ARCHITECTURE
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="work" class="py-24 px-8 md:px-24 border-t border-ink/5 bg-white/40">
+        <div class="max-w-[1400px] mx-auto">
+            <div class="flex items-end justify-between mb-20">
+                <h2 class="font-serif text-4xl md:text-5xl text-ink">Selected Works</h2>
+                <span class="font-sans text-[10px] tracking-[0.3em] text-ink/40">VOL. 01</span>
+            </div>
+
+            <div class="hover-card group relative grid grid-cols-1 md:grid-cols-12 gap-8 mb-32 p-6 md:p-10 border border-ink/5 bg-white">
+                <div class="md:col-span-5 flex flex-col justify-between order-2 md:order-1">
+                    <div>
+                        <span class="block font-sans text-[10px] tracking-[0.3em] text-gold mb-4">01 / JAVA ENTERPRISE</span>
+                        <h3 class="font-serif text-3xl mb-4">SecureVault</h3>
+                        <p class="font-sans text-sm text-ink/60 leading-relaxed mb-6">
+                            A strict <strong>Layered Architecture</strong> banking system. Re-engineered to separate User Identity from Financial Assets using Zero-Knowledge authentication (SHA-Sim) and In-Memory Persistence.
+                        </p>
+                    </div>
+                    <a href="https://github.com/ghost-exodus/studious-spork" target="_blank" class="text-[10px] tracking-[0.2em] uppercase border-b border-ink/20 pb-1 w-max hover:text-gold hover:border-gold transition-colors">View Source</a>
+                </div>
+
+                <div class="md:col-span-7 order-1 md:order-2 bg-ink/5 h-64 relative overflow-hidden flex items-center justify-center border border-ink/5">
+                    <div class="w-48 space-y-2 opacity-60 group-hover:opacity-100 transition-opacity duration-500">
+                        <div class="h-8 w-full border border-ink/20 bg-white flex items-center justify-between px-2">
+                            <div class="flex gap-1"><div class="w-1 h-1 bg-green-500 rounded-full animate-blink"></div><div class="w-1 h-1 bg-ink/20 rounded-full"></div></div>
+                            <div class="h-px w-12 bg-ink/10"></div>
+                        </div>
+                        <div class="h-8 w-full border border-ink/20 bg-white flex items-center justify-between px-2">
+                            <div class="flex gap-1"><div class="w-1 h-1 bg-green-500 rounded-full animate-blink" style="animation-delay: 0.2s"></div></div>
+                            <div class="h-px w-12 bg-ink/10"></div>
+                        </div>
+                        <div class="h-8 w-full border border-ink/20 bg-white flex items-center justify-between px-2 shadow-lg scale-[1.02]">
+                            <div class="flex gap-1"><div class="w-1 h-1 bg-gold rounded-full"></div><span class="text-[8px] font-mono">AUTH_LAYER</span></div>
+                        </div>
+                        <div class="h-8 w-full border border-ink/20 bg-white flex items-center justify-between px-2">
+                            <div class="flex gap-1"><div class="w-1 h-1 bg-green-500 rounded-full animate-blink"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hover-card group relative grid grid-cols-1 md:grid-cols-12 gap-8 mb-32 p-6 md:p-10 border border-ink/5 bg-white">
+                <div class="md:col-span-5 flex flex-col justify-between">
+                    <div>
+                        <span class="block font-sans text-[10px] tracking-[0.3em] text-gold mb-4">02 / AI & SENTIMENT</span>
+                        <h3 class="font-serif text-3xl mb-4">Reputation Checker</h3>
+                        <p class="font-sans text-sm text-ink/60 leading-relaxed mb-6">
+                            CLI tool that scrapes news via Selenium to analyze financial sentiment. Uses <strong>Hugging Face</strong> transformers instead of VADER for context-aware analysis, visualizing results via Matplotlib.
+                        </p>
+                    </div>
+                    <span class="text-[10px] tracking-[0.2em] uppercase border-b border-ink/20 pb-1 w-max text-ink/40">Python CLI Tool</span>
+                </div>
+
+                <div class="md:col-span-7 bg-[#111] h-64 relative flex items-end justify-center p-8 gap-6 border border-ink/5">
+                    <div class="absolute top-4 left-4 font-mono text-[10px] text-green-500">
+                        > analyzing_sentiment...<br>
+                        > target: "RELIANCE_IND"
+                    </div>
+                    <div class="w-12 bg-red-900/50 relative h-full flex items-end group-hover:opacity-100 opacity-60 transition-opacity">
+                        <div class="w-full bg-red-500 animate-grow-bar" style="--h: 20%"></div>
+                        <span class="absolute -bottom-6 w-full text-center text-[10px] text-gray-500 font-mono">NEG</span>
+                    </div>
+                    <div class="w-12 bg-gray-800/50 relative h-full flex items-end group-hover:opacity-100 opacity-60 transition-opacity">
+                        <div class="w-full bg-gray-500 animate-grow-bar" style="--h: 45%; animation-delay: 0.2s"></div>
+                        <span class="absolute -bottom-6 w-full text-center text-[10px] text-gray-500 font-mono">NEU</span>
+                    </div>
+                    <div class="w-12 bg-green-900/50 relative h-full flex items-end group-hover:opacity-100 opacity-60 transition-opacity">
+                        <div class="w-full bg-green-500 animate-grow-bar" style="--h: 80%; animation-delay: 0.4s"></div>
+                        <span class="absolute -bottom-6 w-full text-center text-[10px] text-gray-500 font-mono">POS</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hover-card group relative grid grid-cols-1 md:grid-cols-12 gap-8 p-6 md:p-10 border border-ink/5 bg-white">
+                <div class="md:col-span-5 flex flex-col justify-between">
+                    <div>
+                        <span class="block font-sans text-[10px] tracking-[0.3em] text-gold mb-4">03 / EXTENSION</span>
+                        <h3 class="font-serif text-3xl mb-4">Omni Command</h3>
+                        <p class="font-sans text-sm text-ink/60 leading-relaxed mb-6">
+                            A browser extension acting as a unified interface for multiple AI models. Solves complex queries in real-time by injecting a command layer into the browser DOM.
+                        </p>
+                    </div>
+                    <span class="text-[10px] tracking-[0.2em] uppercase border-b border-ink/20 pb-1 w-max text-ink/40">Javascript Extension</span>
+                </div>
+
+                <div class="md:col-span-7 bg-taupe/20 h-64 relative flex items-center justify-center border border-ink/5">
+                    <div class="w-3/4 h-24 bg-white border border-ink/10 shadow-xl rounded-sm p-4 font-mono text-xs text-ink/80 flex flex-col justify-between group-hover:scale-105 transition-transform duration-500">
+                        <div class="text-[10px] text-ink/30 border-b border-ink/5 pb-2 mb-2 flex justify-between">
+                            <span>OMNI_CMD_V4</span>
+                            <div class="flex gap-1"><div class="w-2 h-2 rounded-full bg-red-400"></div><div class="w-2 h-2 rounded-full bg-yellow-400"></div></div>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="text-gold mr-2">>></span>
+                            <span>Explain quantum computing...</span>
+                            <span class="w-2 h-4 bg-ink/50 ml-1 animate-blink"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 px-8 text-center bg-paper relative overflow-hidden">
+        <span class="absolute top-10 left-10 font-serif text-9xl text-ink/5 opacity-50 select-none">“</span>
+        
+        <div class="max-w-4xl mx-auto">
+            <h2 class="font-serif text-6xl md:text-8xl italic leading-tight text-ink mb-8">
+                "I am still<br> <span class="text-gold">learning.</span>"
+            </h2>
+            <div class="flex flex-col items-center gap-2">
+                <span class="font-sans text-[10px] tracking-[0.3em] uppercase text-ink/40">— Michelangelo</span>
+                <span class="font-mono text-[10px] text-ink/30 italic">at age 87</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-8 md:px-24 bg-ink text-paper">
+        <div class="max-w-[1000px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-16">
+            
+            <div>
+                <h3 class="font-serif text-3xl mb-8">Technical Arsenal</h3>
+                <div class="space-y-6">
+                    <div class="border-b border-white/10 pb-4">
+                        <span class="block font-sans text-[10px] tracking-[0.2em] text-gold uppercase mb-2">Core</span>
+                        <p class="font-mono text-sm text-white/70">Java (Spring Boot), Python, C++</p>
+                    </div>
+                    <div class="border-b border-white/10 pb-4">
+                        <span class="block font-sans text-[10px] tracking-[0.2em] text-gold uppercase mb-2">Security</span>
+                        <p class="font-mono text-sm text-white/70">Digital Forensics, Vulnerability Research</p>
+                    </div>
+                    <div class="border-b border-white/10 pb-4">
+                        <span class="block font-sans text-[10px] tracking-[0.2em] text-gold uppercase mb-2">Infrastructure</span>
+                        <p class="font-mono text-sm text-white/70">Docker, WSL2, Linux Admin</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col justify-between">
+                <div>
+                    <h3 class="font-serif text-3xl mb-6">The Library</h3>
+                    <p class="font-sans text-sm text-white/50 leading-relaxed mb-8">
+                        Strategy is born from input. Curating a selection of technical manuals, sci-fi, and philosophy.
+                    </p>
+                </div>
+                <a href="https://www.goodreads.com/user/show/164440960-tanishq-shrivastava" target="_blank" class="font-sans text-[10px] tracking-[0.3em] uppercase border border-white/20 py-4 text-center hover:bg-white hover:text-ink transition-colors">
+                    View Goodreads Shelf
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-12 px-8 text-center text-ink/40">
+        <p class="font-serif italic text-lg text-ink mb-4 hover:text-gold transition-colors"><a href="mailto:tanishqshrivastava666@gmail.com">tanishqshrivastava666@gmail.com</a></p>
+        <p class="font-sans text-[10px] tracking-widest uppercase">© 2026 Tanishq Shrivastava</p>
+    </footer>
+
+</body>
+</html>
