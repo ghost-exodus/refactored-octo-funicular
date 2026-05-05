@@ -30,6 +30,10 @@
                         'reveal-up': 'revealUp 1s cubic-bezier(0.2, 1, 0.3, 1) forwards',
                         'grow-bar': 'growBar 1.5s ease-out forwards',
                         'blink': 'blink 1s step-end infinite',
+                        'marquee': 'marquee 28s linear infinite',
+                        'pulse-dot': 'pulseDot 2s ease-in-out infinite',
+                        'flow': 'flowLine 2s ease-in-out infinite',
+                        'count-up': 'countUp 2s ease-out forwards',
                     },
                     keyframes: {
                         revealUp: {
@@ -43,7 +47,19 @@
                         blink: {
                             '0%, 100%': { opacity: '1' },
                             '50%': { opacity: '0' },
-                        }
+                        },
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        },
+                        pulseDot: {
+                            '0%, 100%': { opacity: '0.4', transform: 'scale(1)' },
+                            '50%': { opacity: '1', transform: 'scale(1.4)' },
+                        },
+                        flowLine: {
+                            '0%': { strokeDashoffset: '200' },
+                            '100%': { strokeDashoffset: '0' },
+                        },
                     }
                 }
             }
@@ -54,11 +70,9 @@
         body {
             background-color: #F9F8F6;
             color: #0a0a0a;
-            /* Subtle Noise Texture */
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
         }
 
-        /* Editorial Grid Lines */
         .grid-line {
             position: fixed;
             top: 0;
@@ -69,7 +83,6 @@
             pointer-events: none;
         }
 
-        /* Hover Card Effect */
         .hover-card {
             transition: transform 0.4s ease, box-shadow 0.4s ease;
         }
@@ -82,26 +95,136 @@
             background: #D4AF37;
             color: #fff;
         }
+
+        /* Marquee strip */
+        .marquee-inner {
+            display: flex;
+            width: max-content;
+            animation: marquee 28s linear infinite;
+        }
+        .marquee-inner:hover {
+            animation-play-state: paused;
+        }
+
+        /* LLM pipeline animation */
+        @keyframes pipeFlow {
+            0% { stroke-dashoffset: 120; opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { stroke-dashoffset: 0; opacity: 0.3; }
+        }
+        .pipe-line {
+            stroke-dasharray: 120;
+            animation: pipeFlow 2s ease-in-out infinite;
+        }
+        .pipe-line-2 { animation-delay: 0.6s; }
+        .pipe-line-3 { animation-delay: 1.2s; }
+
+        @keyframes nodePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(212,175,55,0.4); }
+            50% { box-shadow: 0 0 0 6px rgba(212,175,55,0); }
+        }
+        .node-pulse {
+            animation: nodePulse 2s ease-in-out infinite;
+        }
+
+        /* Cert card hover */
+        .cert-card {
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+        .cert-card:hover {
+            border-color: #D4AF37 !important;
+            transform: translateY(-3px);
+        }
+
+        /* Achievement strip glow */
+        .award-strip {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1508 50%, #0a0a0a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .award-strip::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at 30% 50%, rgba(212,175,55,0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        /* Education row */
+        .edu-row {
+            background: linear-gradient(90deg, rgba(212,175,55,0.04) 0%, transparent 100%);
+        }
+
+        /* Scroll reveal */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.8s cubic-bezier(0.2,1,0.3,1), transform 0.8s cubic-bezier(0.2,1,0.3,1);
+        }
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* CGPA counter */
+        @keyframes fillBar {
+            from { width: 0%; }
+            to { width: 88%; }
+        }
+        .cgpa-bar {
+            animation: fillBar 1.5s ease-out 0.4s forwards;
+            width: 0%;
+        }
+
+        /* Dot grid bg for certifications */
+        .dot-grid-bg {
+            background-color: #0a0a0a;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        /* Risk meter animation */
+        @keyframes sweepNeedle {
+            0% { transform: rotate(-90deg); }
+            60% { transform: rotate(10deg); }
+            80% { transform: rotate(-5deg); }
+            100% { transform: rotate(5deg); }
+        }
+        .risk-needle {
+            transform-origin: bottom center;
+            animation: sweepNeedle 2s cubic-bezier(0.2,1,0.3,1) 0.5s forwards;
+            transform: rotate(-90deg);
+        }
+        @keyframes riskPulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        .risk-label { animation: riskPulse 1.8s ease-in-out infinite; }
     </style>
 </head>
 <body class="antialiased overflow-x-hidden selection:bg-gold selection:text-white">
 
+    <!-- Grid Lines -->
     <div class="grid-line left-[10%]"></div>
     <div class="grid-line left-[50%] hidden md:block"></div>
     <div class="grid-line right-[10%]"></div>
 
+    <!-- ─── NAV ─────────────────────────────────────────────── -->
     <nav class="fixed top-0 w-full p-8 z-50 flex justify-between items-start mix-blend-darken bg-paper/80 backdrop-blur-sm">
         <span class="font-sans text-[10px] tracking-[0.3em] font-bold uppercase text-ink/80">T. Shrivastava // 2026</span>
         <div class="flex gap-8">
+            <a href="#work" class="font-sans text-[10px] tracking-[0.2em] uppercase hover:text-gold transition-colors">Work</a>
+            <a href="#credentials" class="font-sans text-[10px] tracking-[0.2em] uppercase hover:text-gold transition-colors">Creds</a>
             <a href="https://github.com/ghost-exodus" target="_blank" class="font-sans text-[10px] tracking-[0.2em] uppercase hover:text-gold transition-colors">GitHub</a>
             <a href="https://www.linkedin.com/in/tanishq-shrivastava-a35a6030a/" target="_blank" class="font-sans text-[10px] tracking-[0.2em] uppercase hover:text-gold transition-colors">LinkedIn</a>
         </div>
     </nav>
 
+    <!-- ─── HERO ─────────────────────────────────────────────── -->
     <section class="min-h-[90vh] flex flex-col justify-end pb-24 px-8 md:px-24 pt-32 max-w-[1400px] mx-auto">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
             <div class="md:col-span-8">
-                <p class="font-sans text-[10px] tracking-[0.3em] text-ink/40 mb-6 uppercase animate-reveal-up">Backend Architect & Idea Curator</p>
+                <p class="font-sans text-[10px] tracking-[0.3em] text-ink/40 mb-6 uppercase animate-reveal-up">Backend Architect · Cybersecurity · Idea Curator</p>
                 
                 <h1 class="font-serif text-5xl md:text-7xl leading-[0.9] tracking-tight text-ink mb-12 animate-reveal-up" style="animation-delay: 0.1s">
                     <span class="block">TANISHQ</span>
@@ -111,17 +234,109 @@
 
             <div class="md:col-span-4 border-t border-ink/10 pt-8 mt-4 animate-reveal-up" style="animation-delay: 0.3s">
                 <p class="font-sans text-sm md:text-base leading-relaxed text-ink/70">
-                    Architecting invisible fortresses. Focused on secured backend systems, digital forensics, and idea curation.
+                    Architecting invisible fortresses. Focused on secured backend systems, digital forensics, LLM integration, and idea curation.
                 </p>
-                <div class="mt-8 font-mono text-xs text-gold">
-                    > JAVA_SPRING_BOOT<br>
-                    > PYTHON_SELENIUM<br>
-                    > C++_ARCHITECTURE
+                <div class="mt-8 font-mono text-xs text-gold space-y-1">
+                    <div>> JAVA_SPRING_BOOT</div>
+                    <div>> PYTHON_SELENIUM</div>
+                    <div>> LLAMAINDEX_LLM</div>
+                    <div>> CYBERSECURITY_OPS</div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- ─── ACHIEVEMENT MARQUEE STRIP ───────────────────────── -->
+    <div class="award-strip py-5 overflow-hidden border-y border-gold/20">
+        <div class="marquee-inner">
+            <!-- Duplicate content for seamless loop -->
+            <template id="award-content">
+                <span class="font-mono text-[11px] tracking-[0.25em] text-gold/90 uppercase px-10">★ 1st Place</span>
+                <span class="font-serif italic text-sm text-white/80 px-4">Fin Pitch Battle 2026</span>
+                <span class="font-mono text-[10px] text-white/30 px-6">— Symbiosis International University (SSBF)</span>
+                <span class="font-mono text-[11px] tracking-[0.25em] text-gold/90 uppercase px-10">#1 / 157 Teams</span>
+                <span class="font-serif italic text-sm text-white/80 px-4">Team: Paradigm Pitchers</span>
+                <span class="font-mono text-[10px] text-white/30 px-6">— Grant Awarded: ₹5,000</span>
+                <span class="font-mono text-[10px] text-white/30 px-10">///</span>
+            </template>
+        </div>
+    </div>
+
+    <!-- ─── ACHIEVEMENT FEATURE CARD ────────────────────────── -->
+    <section class="py-20 px-8 md:px-24 border-b border-ink/5 scroll-reveal">
+        <div class="max-w-[1400px] mx-auto">
+            <div class="award-strip rounded-sm border border-gold/20 p-8 md:p-14 grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
+                
+                <!-- Left: Big number -->
+                <div class="md:col-span-3 flex flex-col items-start">
+                    <span class="font-sans text-[9px] tracking-[0.35em] text-gold/60 uppercase mb-3">Competitive Achievement</span>
+                    <div class="font-serif text-[100px] leading-none text-gold font-semibold" style="line-height:0.85">1<span class="text-gold/30 text-6xl align-top" style="font-size:2.5rem; vertical-align:top; padding-top:0.5rem">st</span></div>
+                    <div class="font-mono text-[10px] text-white/30 mt-3 tracking-widest">OUT OF 157 TEAMS</div>
+                </div>
+
+                <!-- Divider -->
+                <div class="hidden md:block md:col-span-1 self-stretch border-l border-gold/15"></div>
+
+                <!-- Center: Details -->
+                <div class="md:col-span-5">
+                    <span class="font-sans text-[9px] tracking-[0.35em] text-gold uppercase block mb-4">2026 — Pan-India Pitching Competition</span>
+                    <h3 class="font-serif text-3xl md:text-4xl text-white mb-4 leading-tight">Fin Pitch Battle <span class="italic text-white/60">— SSBF</span></h3>
+                    <p class="font-sans text-sm text-white/50 leading-relaxed mb-4">
+                        Secured first place across three elimination rounds against 156 competing teams from across India. Recognised for product strategy, competitive market analysis, and presentation excellence.
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <span class="font-mono text-[9px] text-white/30 tracking-widest uppercase">Team:</span>
+                        <span class="font-serif italic text-white/70 text-sm">Paradigm Pitchers</span>
+                    </div>
+                </div>
+
+                <!-- Right: Grant badge -->
+                <div class="md:col-span-3 flex flex-col items-center justify-center border border-gold/20 p-6 rounded-sm text-center">
+                    <span class="font-sans text-[9px] tracking-[0.3em] text-gold/60 uppercase mb-2">Grant Awarded</span>
+                    <span class="font-serif text-4xl text-gold font-semibold">₹5,000</span>
+                    <div class="mt-4 w-full h-px bg-gold/15"></div>
+                    <span class="font-mono text-[9px] text-white/30 mt-3 uppercase tracking-widest">Symbiosis International</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── EDUCATION ────────────────────────────────────────── -->
+    <section class="py-14 px-8 md:px-24 border-b border-ink/5 scroll-reveal" style="transition-delay:0.1s">
+        <div class="max-w-[1400px] mx-auto">
+            <div class="edu-row border border-ink/8 p-6 md:p-10 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                
+                <div class="md:col-span-1">
+                    <span class="font-sans text-[9px] tracking-[0.3em] text-ink/40 uppercase">Edu</span>
+                </div>
+
+                <div class="md:col-span-5">
+                    <span class="font-mono text-[9px] text-gold uppercase tracking-widest block mb-1">2024 – Present</span>
+                    <h4 class="font-serif text-2xl text-ink">Vellore Institute of Technology</h4>
+                    <p class="font-sans text-sm text-ink/50 mt-1">B.Tech · Computer Science (Cybersecurity) · Bhopal, India</p>
+                </div>
+
+                <div class="md:col-span-3 flex flex-col gap-2">
+                    <span class="font-sans text-[9px] tracking-[0.2em] text-ink/40 uppercase">CGPA</span>
+                    <div class="flex items-center gap-4">
+                        <span class="font-serif text-3xl text-ink font-semibold">8.8</span>
+                        <div class="flex-1 h-1 bg-ink/8 rounded-full overflow-hidden">
+                            <div class="cgpa-bar h-full bg-gold rounded-full"></div>
+                        </div>
+                        <span class="font-mono text-[9px] text-ink/30">/10</span>
+                    </div>
+                </div>
+
+                <div class="md:col-span-3 flex flex-wrap gap-2 justify-end">
+                    <span class="font-mono text-[9px] border border-ink/10 px-2 py-1 text-ink/40">CYBERSECURITY</span>
+                    <span class="font-mono text-[9px] border border-ink/10 px-2 py-1 text-ink/40">BACKEND DEV</span>
+                    <span class="font-mono text-[9px] border border-gold/30 px-2 py-1 text-gold/70">ACTIVE</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── SELECTED WORKS ───────────────────────────────────── -->
     <section id="work" class="py-24 px-8 md:px-24 border-t border-ink/5 bg-white/40">
         <div class="max-w-[1400px] mx-auto">
             <div class="flex items-end justify-between mb-20">
@@ -129,14 +344,21 @@
                 <span class="font-sans text-[10px] tracking-[0.3em] text-ink/40">VOL. 01</span>
             </div>
 
-            <div class="hover-card group relative grid grid-cols-1 md:grid-cols-12 gap-8 mb-32 p-6 md:p-10 border border-ink/5 bg-white">
+            <!-- PROJECT 01: SecureVault -->
+            <div class="hover-card group relative grid grid-cols-1 md:grid-cols-12 gap-8 mb-32 p-6 md:p-10 border border-ink/5 bg-white scroll-reveal">
                 <div class="md:col-span-5 flex flex-col justify-between order-2 md:order-1">
                     <div>
                         <span class="block font-sans text-[10px] tracking-[0.3em] text-gold mb-4">01 / JAVA ENTERPRISE</span>
                         <h3 class="font-serif text-3xl mb-4">SecureVault</h3>
                         <p class="font-sans text-sm text-ink/60 leading-relaxed mb-6">
-                            A strict <strong>Layered Architecture</strong> banking system. Re-engineered to separate User Identity from Financial Assets using Zero-Knowledge authentication (SHA-Sim) and In-Memory Persistence.
+                            A strict <strong>Layered Architecture</strong> banking system. Re-engineered to separate User Identity from Financial Assets using Zero-Knowledge authentication (SHA-Sim) and In-Memory Persistence via the Java Collections Framework.
                         </p>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="font-mono text-[9px] border border-ink/10 px-2 py-1 text-ink/40">JAVA</span>
+                            <span class="font-mono text-[9px] border border-ink/10 px-2 py-1 text-ink/40">OOP</span>
+                            <span class="font-mono text-[9px] border border-ink/10 px-2 py-1 text-ink/40">COLLECTIONS</span>
+                            <span class="font-mono text-[9px] border border-ink/10 px-2 py-1 text-ink/40">RBAC</span>
+                        </div>
                     </div>
                     <a href="https://github.com/ghost-exodus/studious-spork" target="_blank" class="text-[10px] tracking-[0.2em] uppercase border-b border-ink/20 pb-1 w-max hover:text-gold hover:border-gold transition-colors">View Source</a>
                 </div>
@@ -161,14 +383,21 @@
                 </div>
             </div>
 
-            <div class="hover-card group relative grid grid-cols-1 md:grid-cols-12 gap-8 mb-32 p-6 md:p-10 border border-ink/5 bg-white">
+            <!-- PROJECT 02: Reputation Checker -->
+            <div class="hover-card group relative grid grid-cols-1 md:grid-cols-12 gap-8 mb-32 p-6 md:p-10 border border-ink/5 bg-white scroll-reveal">
                 <div class="md:col-span-5 flex flex-col justify-between">
                     <div>
                         <span class="block font-sans text-[10px] tracking-[0.3em] text-gold mb-4">02 / AI & SENTIMENT</span>
-                        <h3 class="font-serif text-3xl mb-4">Reputation Checker</h3>
+                        <h3 class="font-serif text-3xl mb-4">Super Broccoli</h3>
                         <p class="font-sans text-sm text-ink/60 leading-relaxed mb-6">
-                            CLI tool that scrapes news via Selenium to analyze financial sentiment. Uses <strong>Hugging Face</strong> transformers instead of VADER for context-aware analysis, visualizing results via Matplotlib.
+                            CLI tool that scrapes real-time financial news via Selenium Webdriver. Uses <strong>Hugging Face</strong> transformers for context-aware sentiment analysis, parsing unstructured text to calculate baseline reputation and reliability scores for stock entities.
                         </p>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="font-mono text-[9px] border border-ink/10 px-2 py-1 text-ink/40">PYTHON</span>
+                            <span class="font-mono text-[9px] border border-ink/10 px-2 py-1 text-ink/40">SELENIUM</span>
+                            <span class="font-mono text-[9px] border border-ink/10 px-2 py-1 text-ink/40">HUGGING FACE</span>
+                            <span class="font-mono text-[9px] border border-ink/10 px-2 py-1 text-ink/40">MATPLOTLIB</span>
+                        </div>
                     </div>
                     <span class="text-[10px] tracking-[0.2em] uppercase border-b border-ink/20 pb-1 w-max text-ink/40">Python CLI Tool</span>
                 </div>
@@ -193,28 +422,163 @@
                 </div>
             </div>
 
-            <div class="hover-card group relative grid grid-cols-1 md:grid-cols-12 gap-8 p-6 md:p-10 border border-ink/5 bg-white">
+            <!-- PROJECT 03: Omni Command -->
+            <div class="hover-card group relative grid grid-cols-1 md:grid-cols-12 gap-8 mb-32 p-6 md:p-10 border border-ink/5 bg-white scroll-reveal">
                 <div class="md:col-span-5 flex flex-col justify-between">
                     <div>
                         <span class="block font-sans text-[10px] tracking-[0.3em] text-gold mb-4">03 / EXTENSION</span>
                         <h3 class="font-serif text-3xl mb-4">Omni Command</h3>
                         <p class="font-sans text-sm text-ink/60 leading-relaxed mb-6">
-                            A browser extension acting as a unified interface for multiple AI models. Solves complex queries in real-time by injecting a command layer into the browser DOM.
+                            A browser extension acting as a unified interface for multiple AI models. Reads text directly from academic web pages via DOM parsing, then simultaneously routes the extracted prompt to <strong>Gemini, Claude,</strong> and <strong>Perplexity</strong> via multi-tab execution.
                         </p>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="font-mono text-[9px] border border-ink/10 px-2 py-1 text-ink/40">JAVASCRIPT</span>
+                            <span class="font-mono text-[9px] border border-ink/10 px-2 py-1 text-ink/40">CHROME API</span>
+                            <span class="font-mono text-[9px] border border-ink/10 px-2 py-1 text-ink/40">DOM PARSING</span>
+                        </div>
                     </div>
                     <span class="text-[10px] tracking-[0.2em] uppercase border-b border-ink/20 pb-1 w-max text-ink/40">Javascript Extension</span>
                 </div>
 
-                <div class="md:col-span-7 bg-taupe/20 h-64 relative flex items-center justify-center border border-ink/5">
-                    <div class="w-3/4 h-24 bg-white border border-ink/10 shadow-xl rounded-sm p-4 font-mono text-xs text-ink/80 flex flex-col justify-between group-hover:scale-105 transition-transform duration-500">
-                        <div class="text-[10px] text-ink/30 border-b border-ink/5 pb-2 mb-2 flex justify-between">
-                            <span>OMNI_CMD_V4</span>
-                            <div class="flex gap-1"><div class="w-2 h-2 rounded-full bg-red-400"></div><div class="w-2 h-2 rounded-full bg-yellow-400"></div></div>
+                <div class="md:col-span-7 bg-taupe/20 h-64 relative flex items-center justify-center border border-ink/5 overflow-hidden">
+                    <!-- Multi-tab routing visual -->
+                    <div class="relative w-full h-full flex items-center justify-center">
+                        <!-- Central input -->
+                        <div class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-40 h-16 bg-white border border-ink/10 shadow-xl rounded-sm p-3 font-mono text-xs text-ink/80 flex flex-col justify-between group-hover:scale-105 transition-transform duration-500 z-10">
+                            <div class="text-[9px] text-ink/30 flex justify-between">
+                                <span>OMNI_CMD_V4</span>
+                                <div class="flex gap-1"><div class="w-2 h-2 rounded-full bg-red-400"></div><div class="w-2 h-2 rounded-full bg-yellow-400"></div></div>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-gold mr-1 text-[10px]">>></span>
+                                <span class="text-[9px]">Query input...</span>
+                                <span class="w-1 h-3 bg-ink/50 ml-1 animate-blink inline-block"></span>
+                            </div>
                         </div>
-                        <div class="flex items-center">
-                            <span class="text-gold mr-2">>></span>
-                            <span>Explain quantum computing...</span>
-                            <span class="w-2 h-4 bg-ink/50 ml-1 animate-blink"></span>
+                        <!-- Target badges -->
+                        <div class="absolute top-5 right-8 font-mono text-[9px] bg-blue-50 border border-blue-200/50 px-3 py-2 rounded-sm opacity-70 group-hover:opacity-100 transition-opacity" style="transition-delay:0.1s">→ GEMINI</div>
+                        <div class="absolute bottom-5 right-8 font-mono text-[9px] bg-purple-50 border border-purple-200/50 px-3 py-2 rounded-sm opacity-70 group-hover:opacity-100 transition-opacity" style="transition-delay:0.2s">→ CLAUDE</div>
+                        <div class="absolute bottom-5 left-8 font-mono text-[9px] bg-green-50 border border-green-200/50 px-3 py-2 rounded-sm opacity-70 group-hover:opacity-100 transition-opacity" style="transition-delay:0.3s">→ PERPLEXITY</div>
+                        <div class="absolute top-5 left-8 font-mono text-[9px] bg-ink/5 border border-ink/10 px-3 py-2 rounded-sm opacity-50 group-hover:opacity-90 transition-opacity text-ink/50">DOM PARSE</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROJECT 04: Insurance Risk Analyzer (NEW) -->
+            <div class="hover-card group relative grid grid-cols-1 md:grid-cols-12 gap-8 p-6 md:p-10 border border-gold/15 bg-white scroll-reveal" style="background: linear-gradient(135deg, #ffffff 80%, #fffbee 100%);">
+                <!-- NEW badge -->
+                <div class="absolute -top-3 left-10 font-mono text-[9px] bg-gold text-white px-3 py-1 tracking-widest uppercase">New</div>
+
+                <div class="md:col-span-5 flex flex-col justify-between">
+                    <div>
+                        <span class="block font-sans text-[10px] tracking-[0.3em] text-gold mb-4">04 / LLM INTEGRATION</span>
+                        <h3 class="font-serif text-3xl mb-4">Insurance Risk Analyzer</h3>
+                        <p class="font-sans text-sm text-ink/60 leading-relaxed mb-6">
+                            A Python text processing pipeline that evaluates unstructured insurance data using the <strong>LlamaIndex API</strong>. Orchestrates sequential API calls to route policy text through Large Language Models, retrieving automated risk assessments at scale.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="font-mono text-[9px] border border-gold/25 px-2 py-1 text-gold/70">PYTHON</span>
+                            <span class="font-mono text-[9px] border border-gold/25 px-2 py-1 text-gold/70">LLAMAINDEX</span>
+                            <span class="font-mono text-[9px] border border-gold/25 px-2 py-1 text-gold/70">PROMPT ENG.</span>
+                            <span class="font-mono text-[9px] border border-ink/10 px-2 py-1 text-ink/40">LLM API</span>
+                        </div>
+                    </div>
+                    <span class="text-[10px] tracking-[0.2em] uppercase border-b border-ink/20 pb-1 w-max text-ink/40">Python · LLM Pipeline</span>
+                </div>
+
+                <!-- LLM Pipeline Visual -->
+                <div class="md:col-span-7 bg-[#0d0d0d] h-72 relative overflow-hidden flex items-center justify-center border border-ink/10">
+                    <div class="absolute inset-0 opacity-5" style="background-image:radial-gradient(circle, #D4AF37 1px, transparent 1px); background-size:20px 20px;"></div>
+                    
+                    <div class="relative w-full px-6 flex flex-col items-center gap-0">
+                        <!-- Pipeline steps -->
+                        <div class="flex items-center w-full justify-between gap-2">
+                            
+                            <!-- Step 1: Policy Doc -->
+                            <div class="flex flex-col items-center gap-2">
+                                <div class="w-16 h-20 border border-white/20 bg-white/5 flex flex-col items-center justify-center gap-1 relative group-hover:border-white/40 transition-all duration-500">
+                                    <div class="w-8 h-2 bg-white/20 rounded-sm"></div>
+                                    <div class="w-6 h-1 bg-white/10 rounded-sm"></div>
+                                    <div class="w-8 h-1 bg-white/10 rounded-sm"></div>
+                                    <div class="w-6 h-1 bg-white/10 rounded-sm"></div>
+                                    <div class="absolute -top-1 -right-1 w-4 h-4 bg-gold/80 flex items-center justify-center">
+                                        <div class="w-2 h-2 border-l border-b border-white/80 rotate-[225deg]"></div>
+                                    </div>
+                                </div>
+                                <span class="font-mono text-[8px] text-white/30 uppercase tracking-widest text-center">Policy<br>Text</span>
+                            </div>
+
+                            <!-- Arrow 1 -->
+                            <div class="flex-1 flex flex-col items-center gap-1">
+                                <svg width="100%" height="12" viewBox="0 0 80 12">
+                                    <line x1="0" y1="6" x2="70" y2="6" stroke="#D4AF37" stroke-width="1" stroke-dasharray="4 3" class="pipe-line"/>
+                                    <polygon points="70,3 80,6 70,9" fill="#D4AF37" opacity="0.6"/>
+                                </svg>
+                                <span class="font-mono text-[7px] text-gold/40">PARSE</span>
+                            </div>
+
+                            <!-- Step 2: LlamaIndex -->
+                            <div class="flex flex-col items-center gap-2">
+                                <div class="w-16 h-20 border border-gold/30 bg-gold/5 flex flex-col items-center justify-center gap-1 group-hover:border-gold/60 transition-all duration-500 node-pulse">
+                                    <span class="font-mono text-[8px] text-gold uppercase tracking-tight leading-tight text-center">Llama<br>Index</span>
+                                    <div class="w-8 h-px bg-gold/20 my-1"></div>
+                                    <div class="flex gap-1">
+                                        <div class="w-1 h-1 bg-gold/60 rounded-full"></div>
+                                        <div class="w-1 h-1 bg-gold/40 rounded-full"></div>
+                                        <div class="w-1 h-1 bg-gold/20 rounded-full"></div>
+                                    </div>
+                                </div>
+                                <span class="font-mono text-[8px] text-white/30 uppercase tracking-widest text-center">API<br>Router</span>
+                            </div>
+
+                            <!-- Arrow 2 -->
+                            <div class="flex-1 flex flex-col items-center gap-1">
+                                <svg width="100%" height="12" viewBox="0 0 80 12">
+                                    <line x1="0" y1="6" x2="70" y2="6" stroke="#D4AF37" stroke-width="1" stroke-dasharray="4 3" class="pipe-line pipe-line-2"/>
+                                    <polygon points="70,3 80,6 70,9" fill="#D4AF37" opacity="0.6"/>
+                                </svg>
+                                <span class="font-mono text-[7px] text-gold/40">PROMPT</span>
+                            </div>
+
+                            <!-- Step 3: LLM -->
+                            <div class="flex flex-col items-center gap-2">
+                                <div class="w-16 h-20 border border-white/15 bg-white/5 flex flex-col items-center justify-center gap-2 group-hover:border-white/30 transition-all duration-500">
+                                    <span class="font-mono text-[8px] text-white/50 uppercase tracking-tight">LLM</span>
+                                    <div class="grid grid-cols-3 gap-0.5">
+                                        <div class="w-2 h-2 bg-white/10 rounded-sm group-hover:bg-white/20 transition-colors"></div>
+                                        <div class="w-2 h-2 bg-white/20 rounded-sm group-hover:bg-white/30 transition-colors"></div>
+                                        <div class="w-2 h-2 bg-white/10 rounded-sm group-hover:bg-white/20 transition-colors"></div>
+                                        <div class="w-2 h-2 bg-white/15 rounded-sm group-hover:bg-white/25 transition-colors"></div>
+                                        <div class="w-2 h-2 bg-white/25 rounded-sm group-hover:bg-white/35 transition-colors"></div>
+                                        <div class="w-2 h-2 bg-white/10 rounded-sm group-hover:bg-white/20 transition-colors"></div>
+                                    </div>
+                                </div>
+                                <span class="font-mono text-[8px] text-white/30 uppercase tracking-widest text-center">Model<br>Inference</span>
+                            </div>
+
+                            <!-- Arrow 3 -->
+                            <div class="flex-1 flex flex-col items-center gap-1">
+                                <svg width="100%" height="12" viewBox="0 0 80 12">
+                                    <line x1="0" y1="6" x2="70" y2="6" stroke="#D4AF37" stroke-width="1" stroke-dasharray="4 3" class="pipe-line pipe-line-3"/>
+                                    <polygon points="70,3 80,6 70,9" fill="#D4AF37" opacity="0.6"/>
+                                </svg>
+                                <span class="font-mono text-[7px] text-gold/40">OUTPUT</span>
+                            </div>
+
+                            <!-- Step 4: Risk Score -->
+                            <div class="flex flex-col items-center gap-2">
+                                <div class="w-16 h-20 border border-green-500/30 bg-green-900/10 flex flex-col items-center justify-center gap-1 group-hover:border-green-500/60 transition-all duration-500">
+                                    <span class="font-mono text-[14px] text-green-400 font-bold">LOW</span>
+                                    <div class="w-10 h-1 bg-gradient-to-r from-green-500 to-green-300 rounded-full"></div>
+                                    <span class="font-mono text-[8px] text-green-500/60">RISK</span>
+                                </div>
+                                <span class="font-mono text-[8px] text-white/30 uppercase tracking-widest text-center">Risk<br>Score</span>
+                            </div>
+                        </div>
+
+                        <!-- Bottom label -->
+                        <div class="mt-6 font-mono text-[9px] text-white/20 tracking-widest uppercase border-t border-white/5 pt-3 text-center w-full">
+                            Automated Insurance Risk Assessment Pipeline
                         </div>
                     </div>
                 </div>
@@ -222,9 +586,9 @@
         </div>
     </section>
 
+    <!-- ─── QUOTE ─────────────────────────────────────────────── -->
     <section class="py-32 px-8 text-center bg-paper relative overflow-hidden">
-        <span class="absolute top-10 left-10 font-serif text-9xl text-ink/5 opacity-50 select-none">“</span>
-        
+        <span class="absolute top-10 left-10 font-serif text-9xl text-ink/5 opacity-50 select-none">"</span>
         <div class="max-w-4xl mx-auto">
             <h2 class="font-serif text-6xl md:text-8xl italic leading-tight text-ink mb-8">
                 "I am still<br> <span class="text-gold">learning.</span>"
@@ -236,6 +600,7 @@
         </div>
     </section>
 
+    <!-- ─── TECHNICAL ARSENAL ────────────────────────────────── -->
     <section class="py-24 px-8 md:px-24 bg-ink text-paper">
         <div class="max-w-[1000px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-16">
             
@@ -243,16 +608,20 @@
                 <h3 class="font-serif text-3xl mb-8">Technical Arsenal</h3>
                 <div class="space-y-6">
                     <div class="border-b border-white/10 pb-4">
-                        <span class="block font-sans text-[10px] tracking-[0.2em] text-gold uppercase mb-2">Core</span>
-                        <p class="font-mono text-sm text-white/70">Java (Spring Boot), Python, C++</p>
+                        <span class="block font-sans text-[10px] tracking-[0.2em] text-gold uppercase mb-2">Languages</span>
+                        <p class="font-mono text-sm text-white/70">Java (Spring Boot), Python, JavaScript, HTML/CSS, C++</p>
+                    </div>
+                    <div class="border-b border-white/10 pb-4">
+                        <span class="block font-sans text-[10px] tracking-[0.2em] text-gold uppercase mb-2">AI & Data</span>
+                        <p class="font-mono text-sm text-white/70">LlamaIndex, Hugging Face, Prompt Engineering, Selenium</p>
                     </div>
                     <div class="border-b border-white/10 pb-4">
                         <span class="block font-sans text-[10px] tracking-[0.2em] text-gold uppercase mb-2">Security</span>
-                        <p class="font-mono text-sm text-white/70">Digital Forensics, Vulnerability Research</p>
+                        <p class="font-mono text-sm text-white/70">Digital Forensics, Vulnerability Research, Cybercrime Investigation</p>
                     </div>
                     <div class="border-b border-white/10 pb-4">
                         <span class="block font-sans text-[10px] tracking-[0.2em] text-gold uppercase mb-2">Infrastructure</span>
-                        <p class="font-mono text-sm text-white/70">Docker, WSL2, Linux Admin</p>
+                        <p class="font-mono text-sm text-white/70">Git/GitHub, Docker, WSL2/Linux, API Integration, OOP Design</p>
                     </div>
                 </div>
             </div>
@@ -271,10 +640,138 @@
         </div>
     </section>
 
-    <footer class="py-12 px-8 text-center text-ink/40">
-        <p class="font-serif italic text-lg text-ink mb-4 hover:text-gold transition-colors"><a href="mailto:tanishqshrivastava666@gmail.com">tanishqshrivastava666@gmail.com</a></p>
+    <!-- ─── CERTIFICATIONS ───────────────────────────────────── -->
+    <section id="credentials" class="py-24 px-8 md:px-24 dot-grid-bg">
+        <div class="max-w-[1400px] mx-auto">
+            
+            <div class="flex items-end justify-between mb-16">
+                <div>
+                    <span class="font-sans text-[9px] tracking-[0.35em] text-gold/60 uppercase block mb-3">Credentials</span>
+                    <h2 class="font-serif text-4xl md:text-5xl text-white">Certifications</h2>
+                </div>
+                <span class="font-sans text-[10px] tracking-[0.3em] text-white/20">VOL. 02</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <!-- Goldman Sachs -->
+                <div class="cert-card border border-white/8 p-8 bg-white/[0.02] flex flex-col justify-between min-h-[200px]">
+                    <div>
+                        <div class="flex items-start justify-between mb-4">
+                            <span class="font-sans text-[9px] tracking-[0.3em] text-gold uppercase">Goldman Sachs</span>
+                            <span class="font-mono text-[9px] text-white/25">Mar 2025</span>
+                        </div>
+                        <h4 class="font-serif text-2xl text-white mb-3">Risk Job Simulation</h4>
+                        <p class="font-sans text-xs text-white/40 leading-relaxed">Practical tasks focused on Risk Assessment and Credit Risk Management frameworks.</p>
+                    </div>
+                    <div class="mt-6 flex flex-wrap gap-2">
+                        <span class="font-mono text-[8px] border border-white/10 px-2 py-1 text-white/30">RISK ASSESSMENT</span>
+                        <span class="font-mono text-[8px] border border-white/10 px-2 py-1 text-white/30">CREDIT RISK</span>
+                    </div>
+                </div>
+
+                <!-- ISC2 -->
+                <div class="cert-card border border-white/8 p-8 bg-white/[0.02] flex flex-col justify-between min-h-[200px]">
+                    <div>
+                        <div class="flex items-start justify-between mb-4">
+                            <span class="font-sans text-[9px] tracking-[0.3em] text-gold uppercase">ISC2</span>
+                            <span class="font-mono text-[9px] text-white/25">Feb 2025</span>
+                        </div>
+                        <h4 class="font-serif text-2xl text-white mb-3">Official CC Self-Paced Training</h4>
+                        <p class="font-sans text-xs text-white/40 leading-relaxed">Focus on Incident Management, Business Continuity Planning, and Security Operations.</p>
+                    </div>
+                    <div class="mt-6 flex flex-wrap gap-2">
+                        <span class="font-mono text-[8px] border border-white/10 px-2 py-1 text-white/30">INCIDENT MGMT</span>
+                        <span class="font-mono text-[8px] border border-white/10 px-2 py-1 text-white/30">BCP</span>
+                        <span class="font-mono text-[8px] border border-white/10 px-2 py-1 text-white/30">SEC OPS</span>
+                    </div>
+                </div>
+
+                <!-- UCB IoT -->
+                <div class="cert-card border border-white/8 p-8 bg-white/[0.02] flex flex-col justify-between min-h-[200px]">
+                    <div>
+                        <div class="flex items-start justify-between mb-4">
+                            <span class="font-sans text-[9px] tracking-[0.3em] text-gold uppercase">Univ. of Colorado Boulder</span>
+                            <span class="font-mono text-[9px] text-white/25">Feb 2026</span>
+                        </div>
+                        <h4 class="font-serif text-2xl text-white mb-3">Industrial IoT Markets &amp; Security</h4>
+                        <p class="font-sans text-xs text-white/40 leading-relaxed">IoT Security protocols, Physical Security frameworks, and Market analysis methodologies.</p>
+                    </div>
+                    <div class="mt-6 flex flex-wrap gap-2">
+                        <span class="font-mono text-[8px] border border-gold/20 px-2 py-1 text-gold/50">IOT SECURITY</span>
+                        <span class="font-mono text-[8px] border border-white/10 px-2 py-1 text-white/30">PHYSICAL SEC</span>
+                        <span class="font-mono text-[8px] border border-white/10 px-2 py-1 text-white/30">MARKET ANALYSIS</span>
+                    </div>
+                </div>
+
+                <!-- NPTEL -->
+                <div class="cert-card border border-white/8 p-8 bg-white/[0.02] flex flex-col justify-between min-h-[200px]">
+                    <div>
+                        <div class="flex items-start justify-between mb-4">
+                            <span class="font-sans text-[9px] tracking-[0.3em] text-gold uppercase">NPTEL</span>
+                            <span class="font-mono text-[9px] text-white/25">Jul 2025</span>
+                        </div>
+                        <h4 class="font-serif text-2xl text-white mb-3">Cybersecurity &amp; Privacy</h4>
+                        <p class="font-sans text-xs text-white/40 leading-relaxed">Cyber Defense strategies, Cybercrime Investigation methods, and Privacy frameworks.</p>
+                    </div>
+                    <div class="mt-6 flex flex-wrap gap-2">
+                        <span class="font-mono text-[8px] border border-white/10 px-2 py-1 text-white/30">CYBER DEFENSE</span>
+                        <span class="font-mono text-[8px] border border-white/10 px-2 py-1 text-white/30">INVESTIGATION</span>
+                        <span class="font-mono text-[8px] border border-white/10 px-2 py-1 text-white/30">PRIVACY</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── FOOTER ───────────────────────────────────────────── -->
+    <footer class="py-12 px-8 text-center text-ink/40 bg-paper border-t border-ink/5">
+        <p class="font-serif italic text-lg text-ink mb-4 hover:text-gold transition-colors">
+            <a href="mailto:tanishqshrivastava666@gmail.com">tanishqshrivastava666@gmail.com</a>
+        </p>
+        <p class="font-mono text-[9px] tracking-widest uppercase text-ink/30 mb-2">tanishqx.in</p>
         <p class="font-sans text-[10px] tracking-widest uppercase">© 2026 Tanishq Shrivastava</p>
     </footer>
 
+    <!-- ─── SCRIPTS ──────────────────────────────────────────── -->
+    <script>
+        // Build marquee content dynamically for seamless loop
+        const template = document.getElementById('award-content');
+        const inner = document.querySelector('.marquee-inner');
+        if (template && inner) {
+            const content = template.innerHTML;
+            // Repeat content many times for a seamless infinite loop
+            inner.innerHTML = content.repeat(6);
+        }
+
+        // Scroll reveal observer
+        const revealEls = document.querySelectorAll('.scroll-reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    const delay = entry.target.style.transitionDelay || '0s';
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+        revealEls.forEach(el => observer.observe(el));
+
+        // CGPA bar animation trigger on scroll
+        const cgpaBar = document.querySelector('.cgpa-bar');
+        if (cgpaBar) {
+            const cgpaObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        cgpaBar.style.animationPlayState = 'running';
+                        cgpaObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            cgpaObserver.observe(cgpaBar);
+        }
+    </script>
 </body>
 </html>
